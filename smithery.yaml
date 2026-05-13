@@ -1,0 +1,14 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      proKey:
+        type: string
+        description: "Pro key for full access"
+  commandFunction: |
+    (config) => {
+      const args = ['server.py'];
+      if (config.proKey) args.push('--pro-key', config.proKey);
+      return {command: 'python3', args: args};
+    }

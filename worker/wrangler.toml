@@ -1,0 +1,10 @@
+name = "mcp-bridge-api"
+main = "worker.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+SUPABASE_URL = "https://yndlhhkhylwihsggdyru.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InluZGxoaGtoeWx3aWhzZ2dkeXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5NDE2MTIsImV4cCI6MjA1NzUxNzYxMn0.4qBYRliFyrZNBAPGkXvpXxLF9BHXxzAdFjtHdCEwjds"
+
+[env.production]
+vars = { SUPABASE_URL = "https://yndlhhkhylwihsggdyru.supabase.co", SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InluZGxoaGtoeWx3aWhzZ2dkeXJ1Iiwicm9sZSI6ImFub24iLCJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InluZGxoaGtoeWx3aWhzZ2dkeXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5NDE2MTIsImV4cCI6MjA1NzUxNzYxMn0.4qBYRliFyrZNBAPGkXvpXxLF9BHXxzAdFjtHdCEwjds" }

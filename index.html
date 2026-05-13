@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP Bridge — One-Click MCP Server Installer</title>
+  <meta name="description" content="Browse, install, and manage MCP servers in one click. Bridge to the Model Context Protocol ecosystem with 24+ MCP servers for your AI assistant.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a1a;
+      color: #e0e0f0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 40px;
+      background: rgba(10, 10, 26, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #1e1e3a;
+    }
+    .nav-logo { font-size: 22px; font-weight: 800; color: #fff; }
+    .nav-logo span { background: linear-gradient(135deg, #6c3ce0, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: #8b8bcc; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: linear-gradient(135deg, #6c3ce0, #3b82f6);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+    .nav-cta:hover { transform: scale(1.05); }
+    
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 100px 20px 60px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6c3ce0, #3b82f6, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #8b8bcc;
+      margin-bottom: 36px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, #6c3ce0, #3b82f6);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(108, 60, 224, 0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(108, 60, 224, 0.5); }
+    .btn-secondary {
+      background: transparent;
+      color: #e0e0f0;
+      border: 2px solid #2a2a4a;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .btn-secondary:hover { border-color: #6c3ce0; }
+    
+    /* Stats */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 20px;
+      background: #12122a;
+      border-top: 1px solid #1e1e3a;
+      border-bottom: 1px solid #1e1e3a;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-number { font-size: 28px; font-weight: 800; color: #fff; }
+    .stat-label { font-size: 13px; color: #6b6b8b; margin-top: 4px; }
+    
+    /* MCP Grid */
+    section { padding: 60px 20px; }
+    .section-title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: #6b6b8b;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+    .mcp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .mcp-card {
+      background: #12122a;
+      border: 1px solid #1e1e3a;
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .mcp-card:hover { border-color: #6c3ce0; transform: translateY(-2px); }
+    .mcp-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .mcp-card .author { font-size: 12px; color: #6b6b8b; margin-bottom: 8px; }
+    .mcp-card .desc { font-size: 13px; color: #8b8bcc; margin-bottom: 12px; line-height: 1.5; }
+    .mcp-card .meta { display: flex; gap: 16px; font-size: 12px; color: #5b5b7b; }
+    
+    /* Pricing */
+    .pricing-grid {
+      display: flex;
+      gap: 20px;
+      max-width: 960px;
+      margin: 0 auto;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .pricing-card {
+      background: #12122a;
+      border: 1px solid #1e1e3a;
+      border-radius: 16px;
+      padding: 32px;
+      width: 280px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .pricing-card.featured { border-color: #6c3ce0; background: linear-gradient(135deg, #1a1a3e, #12122a); }
+    .pricing-card .plan-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .pricing-card .price { font-size: 42px; font-weight: 800; margin-bottom: 4px; }
+    .pricing-card .price span { font-size: 16px; color: #6b6b8b; font-weight: 400; }
+    .pricing-card .interval { font-size: 13px; color: #6b6b8b; margin-bottom: 20px; }
+    .pricing-card ul { list-style: none; text-align: left; margin-bottom: 24px; }
+    .pricing-card li { padding: 6px 0; font-size: 13px; color: #8b8bcc; }
+    .pricing-card li::before { content: '✓ '; color: #4ade80; }
+    .pricing-card .btn-pricing {
+      display: block;
+      background: linear-gradient(135deg, #6c3ce0, #3b82f6);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .pricing-card.featured .btn-pricing { background: linear-gradient(135deg, #c084fc, #6c3ce0); }
+    
+    /* How it works */
+    .steps {
+      display: flex;
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .step {
+      text-align: center;
+      width: 240px;
+    }
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6c3ce0, #3b82f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0 auto 16px;
+      color: white;
+    }
+    .step h4 { font-size: 16px; margin-bottom: 8px; }
+    .step p { font-size: 13px; color: #6b6b8b; }
+    
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #0a0a2e, #1a0a2e);
+    }
+    .cta-section h2 { font-size: 36px; font-weight: 700; margin-bottom: 16px; }
+    .cta-section p { color: #8b8bcc; margin-bottom: 32px; font-size: 16px; }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #5b5b7b;
+      font-size: 13px;
+      border-top: 1px solid #1e1e3a;
+    }
+    
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 32px; }
+      .stats-bar { gap: 24px; }
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-logo">🌉 <span>MCP Bridge</span></div>
+    <div class="nav-links">
+      <a href="#catalog">Catalog</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#" class="nav-cta">Add to Chrome</a>
+    </div>
+  </nav>
+  
+  <section class="hero">
+    <h1>One Click to Connect Your AI to Anything</h1>
+    <p>MCP Bridge lets you browse, install, and manage MCP servers directly from Chrome. Connect your AI assistant to 24+ services in seconds.</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">⚡ Add to Chrome — Free</a>
+      <a href="#catalog" class="btn-secondary">Browse Catalog →</a>
+    </div>
+  </section>
+  
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-number">24+</div><div class="stat-label">MCP Servers</div></div>
+    <div class="stat"><div class="stat-number">10K+</div><div class="stat-label">Installs</div></div>
+    <div class="stat"><div class="stat-number">1-Click</div><div class="stat-label">Setup</div></div>
+    <div class="stat"><div class="stat-number">Free</div><div class="stat-label">Tier Available</div></div>
+  </div>
+  
+  <section id="catalog">
+    <h2 class="section-title">Available MCP Servers</h2>
+    <p class="section-subtitle">24+ services ready to connect to your AI assistant</p>
+    <div class="mcp-grid" id="mcpGrid"></div>
+  </section>
+  
+  <section id="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Get started in under 60 seconds</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Install Extension</h4>
+        <p>Add the MCP Bridge extension to Chrome from the Chrome Web Store</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Browse MCPs</h4>
+        <p>Search and discover 24+ MCP servers organized by category</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Install & Copy</h4>
+        <p>Click install to copy the MCP config JSON. Paste into your AI client. Done!</p>
+      </div>
+    </div>
+  </section>
+  
+  <section id="pricing">
+    <h2 class="section-title">Simple Pricing</h2>
+    <p class="section-subtitle">Start free, upgrade when you need more</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="plan-name">Free</div>
+        <div class="price">$0<span>/mo</span></div>
+        <div class="interval">Forever free</div>
+        <ul>
+          <li>3 MCP installs</li>
+          <li>Basic search</li>
+          <li>Copy config to clipboard</li>
+          <li>Browser-based only</li>
+        </ul>
+        <a href="#" class="btn-pricing">Get Started</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="plan-name">Pro ✨</div>
+        <div class="price">$9<span>/mo</span></div>
+        <div class="interval">Most popular</div>
+        <ul>
+          <li>Unlimited MCP installs</li>
+          <li>Priority support</li>
+          <li>Advanced search & filters</li>
+          <li>Auto-config generation</li>
+          <li>Usage analytics</li>
+        </ul>
+        <a href="#" class="btn-pricing" id="proLink">Upgrade to Pro</a>
+      </div>
+      <div class="pricing-card">
+        <div class="plan-name">Unlimited 🚀</div>
+        <div class="price">$29<span>/mo</span></div>
+        <div class="interval">For teams</div>
+        <ul>
+          <li>Everything in Pro</li>
+          <li>Team sharing</li>
+          <li>Custom MCP servers</li>
+          <li>Priority API access</li>
+          <li>SSO / SAML</li>
+        </ul>
+        <a href="#" class="btn-pricing" id="unlimitedLink">Go Unlimited</a>
+      </div>
+    </div>
+  </section>
+  
+  <div class="cta-section">
+    <h2>Ready to supercharge your AI?</h2>
+    <p>Join thousands of developers using MCP Bridge to connect their AI assistants to the tools they love.</p>
+    <a href="#" class="btn-primary">⚡ Add to Chrome — It's Free</a>
+  </div>
+  
+  <footer>
+    <p>© 2026 MCP Bridge · Built by <a href="https://github.com/Rumblingb" style="color:#6c3ce0;">Rumblingb</a> · <a href="#" style="color:#6b6b8b;">Privacy</a> · <a href="#" style="color:#6b6b8b;">Terms</a></p>
+  </footer>
+  
+  <script>
+    // Render MCP cards
+    const mcps = [
+      { id: 'supabase', name: 'Supabase', author: 'supabase', category: 'database', description: 'Manage tables, run queries, deploy edge functions', installs: 1240, rating: 4.8 },
+      { id: 'stripe', name: 'Stripe', author: 'stripe', category: 'payments', description: 'Manage payments, customers, subscriptions, invoices', installs: 980, rating: 4.7 },
+      { id: 'cloudflare', name: 'Cloudflare', author: 'cloudflare', category: 'infrastructure', description: 'Deploy Workers, manage R2, D1, KV, and DNS', installs: 845, rating: 4.6 },
+      { id: 'github', name: 'GitHub', author: 'github', category: 'devtools', description: 'Manage repos, issues, PRs, search code', installs: 1560, rating: 4.9 },
+      { id: 'filesystem', name: 'Filesystem', author: 'anthropic', category: 'tools', description: 'Read, write, manage files on your local filesystem', installs: 2100, rating: 4.5 },
+      { id: 'brave-search', name: 'Brave Search', author: 'brave', category: 'search', description: 'Web and local search via Brave Search API', installs: 720, rating: 4.4 },
+      { id: 'puppeteer', name: 'Puppeteer', author: 'anthropic', category: 'browser', description: 'Browser automation - navigate, click, screenshot', installs: 890, rating: 4.6 },
+      { id: 'memory', name: 'Memory', author: 'anthropic', category: 'tools', description: 'Persistent memory with knowledge graph', installs: 650, rating: 4.3 },
+      { id: 'slack', name: 'Slack', author: 'slack', category: 'communication', description: 'Send messages, manage channels, search Slack', installs: 430, rating: 4.2 },
+      { id: 'notion', name: 'Notion', author: 'notion', category: 'productivity', description: 'Create pages, query databases, manage workspace', installs: 560, rating: 4.5 },
+      { id: 'airtable', name: 'Airtable', author: 'airtable', category: 'database', description: 'CRUD operations on Airtable bases', installs: 340, rating: 4.3 },
+      { id: 'figma', name: 'Figma', author: 'figma', category: 'design', description: 'Access files, components, styles, design tokens', installs: 280, rating: 4.1 },
+    ];
+    
+    const grid = document.getElementById('mcpGrid');
+    grid.innerHTML = mcps.map(m => `
+      <div class="mcp-card">
+        <h3>${m.name} MCP</h3>
+        <div class="author">by ${m.author}</div>
+        <div class="desc">${m.description}</div>
+        <div class="meta">
+          <span>⭐ ${m.rating}</span>
+          <span>📥 ${m.installs.toLocaleString()}</span>
+          <span>📁 ${m.category}</span>
+        </div>
+      </div>
+    `).join('');
+  </script>
+</body>
+</html>

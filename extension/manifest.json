@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "MCP Bridge — One-Click MCP Installer",
+  "version": "1.0.0",
+  "description": "Browse, install, and manage MCP servers in one click. Bridge to the Model Context Protocol ecosystem.",
+  "permissions": ["storage", "clipboardWrite"],
+  "host_permissions": ["https://mcp-bridge-api.apaybeta.workers.dev/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "MCP Bridge",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
